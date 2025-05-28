@@ -1,0 +1,65 @@
+<%- include('./layouts/header.ejs')%>
+
+
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <%- include('./layouts/sidebar.ejs')%>
+    <!-- End of Sidebar -->
+
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <!-- Topbar -->
+            <%- include('./layouts/navbar.ejs')%>
+            <!-- End of Topbar -->
+
+            <div class="container-fluid">
+
+               
+
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-0 text-gray-800">Cars</h1>
+                    <div>
+                        <a href="create" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-plus text-white-50"></i> Create Car</a>
+                        <a href="trash" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm"><i class="fas fa-trash text-white-50"></i> Trash</a>
+                    </div>
+                </div>
+
+                <div class="card shadow mb-4">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Image</th>
+                                        <th>Prize</th>
+                                        <th>Description</th>
+                                        <th>Status</th>
+                                        <th>Created</th>
+                                        <th>Operations</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('./layouts/script.ejs')%>
+
+<script>
+    $(document).ready(function() {
+        $('#dataTable').DataTable();
+    });
+</script>
+
+<%- include('./layouts/footer.ejs')%>

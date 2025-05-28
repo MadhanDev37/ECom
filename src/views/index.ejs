@@ -1,0 +1,56 @@
+<%- include('layouts/header', { title: 'Home' }) %>
+<%- include('layouts/navbar') %>
+
+<div class="section-1">
+    <div class="home-container">
+        <div class="home-banner-text">
+            <h1>Looking for the Perfect Gadget?</h1>
+            <h1>Find It Now!</h1>
+        </div>
+        <div class="search-box">
+            <form class="book-search-form" id="book-search-form">
+                <div class="search-keyword">
+                    <input type="text" id="product-title" class="search-field" placeholder="Search for Products, Brands and More" name="product_title">
+                </div>
+                <div class="search-btns">
+                    <button class="search-btn" id="search-btn">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="section-2">
+    <div class="home-books-top">
+        <h1>Best of Electronics on Electro Cart</h1>
+        <p>Explore our collection of customer favorites and top-rated gadgets, handpicked just for you.</p>
+        <p>Find your next must-have device among the most loved electronics on Electro Cart.</p>
+    </div>
+    <div class="popular-books-container swiper">
+        <div class="swiper-wrapper">
+  
+        </div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+      </div>
+    <!-- <div class="home-books-bottom">
+        <a href="/lists">Browse All Products</a>
+    </div> -->
+</div>
+<div class="section-3">
+    <div class="home-books-top">
+        <h1>Best Deals on Smartphones</h1>
+    </div>
+    <div class="latest-books-container swiper">
+        <div class="swiper-wrapper">
+  
+        </div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+      </div>
+    <!-- <div class="home-books-bottom">
+        <a href="/lists">Browse All Products</a>
+    </div> -->
+</div>
+
+<%- include('layouts/footer') %>

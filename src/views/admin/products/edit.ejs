@@ -1,0 +1,115 @@
+<%- include('../layouts/header.ejs') %>
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <%- include('../layouts/sidebar.ejs')%>
+    <!-- End of Sidebar -->
+
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <!-- Topbar -->
+            <%- include('../layouts/navbar.ejs')%>
+            <!-- End of Topbar -->
+
+            <div class="container-fluid">
+
+               
+
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <a href="/admin/products" class="h5 m-0"><i class="fas fa-angle-left"></i> Go back to product lists</a>
+                </div>
+
+                <div class="card shadow mb-4">
+                    <div class="card-body">
+                        <h5 class="text-info">Update Product</h5>
+                        <form action="/admin/products/edit" class="mt-3" method="post" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <input type="hidden" name="productId" value="<%=products._id%>">
+                            </div>
+                            <div class="form-group">
+                                <label for="title">Brand Name</label>
+                                <select name="bname" id="bname" aria-label="Default select example" class="form-control <%= validationErrors.find(e => e.path === 'bname') ? 'invalid' : '' %>" aria-placeholder="Choose a brand">
+                                    <option value="" disabled selected>Choose a Brand</option>
+                                    
+                                    <% brands.forEach(b => { %>
+                                        <option value="<%= b._id %>" <% if (String(products.brand) === String(b._id)) { %>selected<% } %>><%= b.name%> - <%= b.category_id.title %></option>
+                                        <% }) %>
+                                </select>
+                                <span class="text-danger">
+                                    <% const bnameError = validationErrors.find(e => e.path === 'bname'); %>
+                                <%= bnameError ? bnameError.msg : '' %>
+                                </span>
+                            </div>
+                           
+                            <div class="form-group">
+                                <label for="title">Name</label>
+                                <input type="text" name="name" id="name" class="form-control <%=validationErrors.find( e=> e.path === 'name') ? 'invalid' : '' %>" value="<%=products.name%>">
+                                <span class="text-danger">
+                                    <% const nameError = validationErrors.find(e => e.path === 'name'); %>
+                                <%= nameError ? nameError.msg : '' %>
+                                </span>
+                            </div>
+                            <div class="form-group">
+                                <label for="title">price</label>
+                                <input type="number" name="price" min="0" id="price" class="form-control <%=validationErrors.find( e=> e.path === 'price') ? 'invalid' : '' %>" value="<%=products.price%>">
+                                <span class="text-danger">
+                                    <% const prizeError = validationErrors.find(e => e.path === 'price'); %>
+                                <%= prizeError ? prizeError.msg : '' %>
+                                </span>
+                            </div>
+                            <div class="form-group">
+                                <label for="desc">Description</label>
+                                <textarea class="form-control <%=validationErrors.find( e=> e.path === 'desc') ? 'invalid' : '' %>" name="desc" id="desc" cols="10" rows="4"><%=products.description%></textarea>
+                                <span class="text-danger">
+                                    <% const descError = validationErrors.find(e => e.path === 'desc'); %>
+                                <%= descError ? descError.msg : '' %>
+                                </span>
+                            </div>
+                            <div class="form-group">
+                                <label for="title">Qty</label>
+                                <input type="number" name="qty" id="qty" min="0" class="form-control <%=validationErrors.find( e=> e.path === 'qty') ? 'invalid' : '' %>" value="<%=products.qty%>">
+                                <span class="text-danger">
+                                    <% const qtyError = validationErrors.find(e => e.path === 'qty'); %>
+                                <%= qtyError ? qtyError.msg : '' %>
+                                </span>
+                            </div>
+                            <div class="form-group">
+                                <label for="image">Images</label>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input <%=validationErrors.find( e=> e.path === 'images') ? 'invalid' : '' %>" name="images" id="image" multiple>
+                                    <label class="custom-file-label" for="image">Choose files</label>
+                                </div>
+                                <span class="text-danger">
+                                    <% const imageError = validationErrors.find(e => e.path === 'images' || validationErrors.find(e => e.param === 'images')); %>
+                                <%= imageError ? imageError.msg : '' %>
+                                </span>
+                            </div>
+                            <div class="preview-images-zone d-none"></div>
+                            <div class="form-group">
+                                <input type="hidden" name="oldImages" value="<%=products.images%>">
+                                <%products.images.forEach((img)=>{%>
+                                <img src="/<%=img%>" alt="" srcset="" width="100px">
+                                <%})%>
+                            </div>                            
+                            <div class="form-group">
+                                <input type="submit" name="update" class="btn btn-primary" value="Update">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../layouts/script.ejs')%>
+
+<script>
+    $(document).ready(function() {
+        $('#dataTable').DataTable();
+    });
+</script>
+
+<%- include('../layouts/footer.ejs')%>

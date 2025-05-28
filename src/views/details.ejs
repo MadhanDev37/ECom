@@ -1,0 +1,34 @@
+<%- include('layouts/header', { title: 'Details' }) %>
+<%- include('layouts/navbar') %>
+    <div class="books-container">
+        <div class="section-1">
+            <div class="book_view_container">
+                <div class="part1">
+                    <div class="left">
+                        <div class="book_images swiper">
+                            <div class="swiper-wrapper">
+                            </div>
+                            <div class="swiper-pagination"></div>
+                        </div>
+                        <div class="qty-box">
+                            <button class="decrement-btn">-</button>
+                            <input type="number" min="1" value="1" class="qty-input" id="product-qty">
+                            <button class="increment-btn">+</button>
+                        </div>
+                        <div class="addtocart">
+                            <button class="addtocart" id="viewaddtocart">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="right">
+                        <div class="book-details-table">
+                            <p id="product-title"></p>
+                            <p id="product-price"></p>
+                            <p id="product-description"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%- include('layouts/footer') %>

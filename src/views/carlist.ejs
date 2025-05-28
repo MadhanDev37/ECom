@@ -1,0 +1,336 @@
+<%- include('./layouts/header.ejs')%>
+
+<div id="wrapper">
+  <div id="client-content-wrapper" class="d-flex flex-column">
+    <div id="content">
+      <%- include('./layouts/navbar.ejs')%>
+      <div class="cartlists-container">
+        <div class="section-1">
+          <!-- <h1>tetstst</h1> -->
+          <div class="car-filter-container">
+            <div class="filters">
+              <div class="car-filter-head">
+                <h3>Filters</h3>
+                <span>Reset</span>
+              </div>
+              <div class="butgetwise-filters p-3">
+                <div class="d-flex justify-content-between">
+                  <p>Budget</p>
+                  <span>&#9866;</span>
+                </div>
+                <ul>
+                  <li>
+                    <input
+                      type="checkbox"
+                      name="carbudget"
+                      class="carbudget"
+                      id="cb"
+                      value="1 - 5 Lakh"
+                    />
+                    <label for="cb"> 1 - 5 Lakh</label>
+                  </li>
+                  <li>
+                    <input
+                      type="checkbox"
+                      name="carbudget"
+                      class="carbudget"
+                      id="cb1"
+                      value="5 - 10 Lakh"
+                    />
+                    <label for="cb1"> 5 - 10 Lakh</label>
+                  </li>
+                  <li>
+                    <input
+                      type="checkbox"
+                      name="carbudget"
+                      class="carbudget"
+                      id="cb2"
+                      value="10 - 15 Lakh"
+                    />
+                    <label for="cb2"> 10 - 15 Lakh</label>
+                  </li>
+                  <li>
+                    <input
+                      type="checkbox"
+                      name="carbudget"
+                      class="carbudget"
+                      id="cb3"
+                      value="15 - 20 Lakh"
+                    />
+                    <label for="cb3"> 15 - 20 Lakh</label>
+                  </li>
+                  <li>
+                    <input
+                      type="checkbox"
+                      name="carbudget"
+                      class="carbudget"
+                      id="cb4"
+                      value="20 - 35 Lakh"
+                    />
+                    <label for="cb4"> 20 - 35 Lakh</label>
+                  </li>
+                  <li>
+                    <input
+                      type="checkbox"
+                      name="carbudget"
+                      class="carbudget"
+                      id="cb5"
+                      value="35 - 50 Lakh"
+                    />
+                    <label for="cb5"> 35 - 50 Lakh</label>
+                  </li>
+                  <li>
+                    <input
+                      type="checkbox"
+                      name="carbudget"
+                      class="carbudget"
+                      id="cb6"
+                      value="50 - 1 Crore"
+                    />
+                    <label for="cb6"> 50 - 1 Crore</label>
+                  </li>
+                  <li>
+                    <input
+                      type="checkbox"
+                      name="carbudget"
+                      class="carbudget"
+                      id="cb7"
+                      value="Above 1 Crore"
+                    />
+                    <label for="cb7"> Above 1 Crore</label>
+                  </li>
+                </ul>
+              </div>
+              <div class="carbrand-filters p-3">
+                <div class="d-flex justify-content-between">
+                  <p>Brands</p>
+                  <span>&#9866;</span>
+                </div>
+                <ul>
+                  <%brands.forEach((b,i)=>{%>
+                  <li>
+                    <input
+                      type="checkbox"
+                      name="carbrand"
+                      class="carbrand"
+                      id="cbr<%=i+1%>"
+                      value="<%=b._id%>"
+                    />
+                    <label for="cbr<%=i+1%>"><%=b.name%></label>
+                  </li>
+                  <%})%>
+                </ul>
+              </div>
+              <div class="filter-btn">
+                <button class="btn btn-outline-info">Apply</button>
+              </div>
+            </div>
+          </div>
+          <div class="carlist-container">
+            <div class="carlists">
+              <div class="skeleton"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('./layouts/script.ejs')%>
+<script>
+  const urlParams = new URLSearchParams(window.location.search);
+  const brand = urlParams.get("brand");
+  console.log("brands", brand);
+  const price = urlParams.get("price");
+  const carbrand = document.querySelectorAll(".carbrand");
+  const carbudget = document.querySelectorAll(".carbudget");
+  const carFilterHead = document.querySelector(".car-filter-head span");
+  const trimmedBrands = brand != null ? brand.split(",") : [];
+  carbrand.forEach((cb) => {
+    if (cb && trimmedBrands.includes(cb.value)) {
+      cb.checked = true;
+      carFilterHead.classList.add("active");
+    }
+  });
+
+  trimedprice = price != null ? price.split(",") : [];
+  carbudget.forEach((cb) => {
+    if (cb && trimedprice.includes(cb.value)) {
+      cb.checked = true;
+      carFilterHead.classList.add("active");
+    }
+  });
+  carFilterHead.addEventListener("click", () => {
+    carbrand.forEach((cb) => {
+      if (cb.checked) {
+        cb.checked = false;
+      }
+    });
+
+    carbudget.forEach((cb) => {
+      if (cb.checked) {
+        cb.checked = false;
+      }
+    });
+    carFilterHead.classList.remove("active");
+    // window.history.replaceState('/carlist');
+    window.history.replaceState({}, "", "/carlist");
+    getCars(brand, price);
+    preventBackNavigation();
+  });
+
+  function preventBackNavigation() {
+    window.history.pushState(null, "", window.location.href);
+    window.addEventListener("popstate", function () {
+      window.history.pushState(null, "", window.location.href);
+    });
+  }
+
+  const getCars = async (brand, price) => {
+    try {
+      // console.log('ceckkk',brand);
+      // console.log('brand', brand, 'price', price)
+      // trimedBrand=brand!=null?brand.trim():brand;
+      // trimedprice = price!=null ? price.trim() : price;
+      const response = await fetch("/getAllCars", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          brand: brand,
+          price: price,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      const carlistContainer = document.querySelector(".carlists");
+      // const btnviewallcars = document.querySelector('.btnviewallcars');
+      if (data.length > 0) {
+        carlistContainer.innerHTML = "";
+        data.forEach((c) => {
+          let indprice;
+
+          if (typeof c.price === 'number' && !isNaN(c.price)) {
+  const priceLength = c.price.toString().length;
+
+  if (priceLength >= 6 && priceLength < 8) {
+    indprice = (c.price / 100000).toFixed(2) + " Lakh";
+  } else if (priceLength >= 8 && priceLength < 11) {
+    indprice = (c.price / 10000000).toFixed(2) + " Crore";
+  } else {
+    indprice = c.price.toString();
+  }
+}
+
+          carlistContainer.innerHTML += `
+          <div class="cars-list">
+          <div class="cars-list-top">
+            <div class="car-image">
+              <img src="/${c.images[0]}" alt="${c.name}" />
+            </div>
+          </div>
+          <div class="cars-list-bottom">
+            <p data-cid=${c._id} id="carName">${c.name}</p>
+            <p>₹ ${indprice}</p>
+            <button class="btn home-book-now">Book Now</button>
+          </div>
+          </div>`;
+        });  
+        const carsList = document.querySelectorAll('.cars-list');
+        carsList.forEach((c)=>{
+          c.addEventListener('click',(e)=>{
+            const carId=c.querySelector('#carName').getAttribute('data-cid');
+            console.log('carlist',carId)
+
+      e.preventDefault();
+      window.location.href=`/carlist/${carId}`;
+    })    
+  })
+        document.querySelectorAll(".cars-list img").forEach((img) => {
+          img.addEventListener("load", () => {
+            const skeleton = img.previousElementSibling;
+            if (skeleton && skeleton.classList.contains("skeleton")) {
+              skeleton.remove();
+            }
+            img.style.opacity = "1";
+          });
+        });
+      } else {
+        carlistContainer.innerHTML = "";
+        carlistContainer.innerHTML = `<h2>No Cars</h2>`;
+      }
+      // console.log('working',data);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+  getCars(brand, price);
+
+  const butgetwiseFilters = document.querySelector(".butgetwise-filters ul");
+  const butgetwiseFiltersbtns = document.querySelector(
+    ".butgetwise-filters div"
+  );
+  const butgetwiseFiltersbtn = document.querySelector(
+    ".butgetwise-filters div span"
+  );
+  butgetwiseFiltersbtns.addEventListener("click", (e) => {
+    e.preventDefault();
+    // butgetwiseFilters.style.display="none";
+    if (butgetwiseFilters.classList.contains("active")) {
+      butgetwiseFiltersbtn.innerHTML = "&#9866;";
+      butgetwiseFilters.classList.remove("active");
+    } else {
+      butgetwiseFiltersbtn.innerHTML = "&#10010;";
+      butgetwiseFilters.classList.add("active");
+    }
+  });
+  const carbrandFilters = document.querySelector(".carbrand-filters ul");
+  const carbrandFiltersbtns = document.querySelector(".carbrand-filters div");
+  const carbrandFiltersbtn = document.querySelector(
+    ".carbrand-filters div span"
+  );
+  carbrandFiltersbtns.addEventListener("click", () => {
+    if (carbrandFilters.classList.contains("active")) {
+      carbrandFiltersbtn.innerHTML = "&#9866;";
+      carbrandFilters.classList.remove("active");
+    } else {
+      carbrandFiltersbtn.innerHTML = "&#10010;";
+      carbrandFilters.classList.add("active");
+    }
+  });
+  applyFilterBtn = document.querySelector(".filter-btn .btn");
+  applyFilterBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    selectedprice = butgetwiseFilters.querySelectorAll("input");
+    selectedBrand = carbrandFilters.querySelectorAll("input");
+    let sendprice = [];
+    let sendBrand = [];
+    selectedprice.forEach((sp) => {
+      if (sp.checked == true) {
+        sendprice.push(sp.value);
+      }
+    });
+    selectedBrand.forEach((sp) => {
+      if (sp.checked == true) {
+        sendBrand.push(sp.value);
+      }
+    });
+    if (sendBrand.length > 0 || sendprice.length > 0) {
+      const b = sendBrand.join(",");
+      const p = sendprice.join(",");
+      // console.log('brand',sendBrand,'comma seprated brand',b);
+      window.history.replaceState({},'',`/carlist?brand=${b}&price=${p}`);
+      preventBackNavigation();
+      carFilterHead.classList.add("active");
+      getCars(sendBrand, sendprice);
+    }
+    // console.log('sbrand',sendBrand,'sprice',sendprice);
+  });
+  // console.log('applyFilterBtn',applyFilterBtn)
+
+
+</script>
+<%- include('./layouts/footer.ejs')%>

@@ -1,0 +1,71 @@
+<%- include('./layouts/header.ejs')%>
+
+<div id="wrapper">
+  <div id="client-content-wrapper" class="d-flex flex-column">
+    <div id="content">
+      <%- include('./layouts/navbar.ejs')%>
+      <div class="spsdetails-container">
+        <div class="section-1">
+          <div class="spsdetails">
+            <div class="part1">
+              <div class="spsImg">
+                <div class="swiper mySwiper">
+                  <div class="swiper-wrapper">
+                    <%sps.images.forEach((ci)=>{%>
+                    <div class="swiper-slide"><img src="/<%=ci%>" alt="" /></div>
+                    <%})%>
+                  </div>
+                  <div class="swiper-button-next"></div>
+                  <div class="swiper-button-prev"></div>
+                </div>
+              </div>
+              <div class="spsPrize">
+                <h2><%=sps.name%></h2>
+                <p><%=sps.description%></p>
+                <p>
+                  <% if (sps.price) { %>
+                  <% 
+                                    let indprice;
+                                    if (sps.price.toString().length >= 6 && sps.price.toString().length < 8) {
+                                      indprice = (sps.price / 100000).toFixed(2).concat(" Lakh");
+                                    } else if (sps.price.toString().length >= 8 && sps.price.toString().length < 11) {
+                                      indprice = (sps.price / 10000000).toFixed(2).concat(" Crore");
+                                    } else {
+                                      indprice = sps.price.toString();
+                                    }
+                                  %>
+                  <%= 'Rs.'+indprice %>
+                  <% } %>
+                </p>
+                <button class="btn buy-now" data-sps-cart-id="<%=sps._id%>">Add to Cart</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<%- include('./layouts/script.ejs')%>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+  var swiper = new Swiper(".mySwiper", {
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
+  });
+</script>
+<script>
+  document.querySelectorAll(".cars-list img").forEach((img) => {
+    img.addEventListener("load", () => {
+      const skeleton = img.previousElementSibling;
+      if (skeleton && skeleton.classList.contains("skeleton")) {
+        skeleton.remove();
+      }
+      img.style.opacity = "1";
+    });
+  });
+</script>
+<%- include('./layouts/footer.ejs')%>

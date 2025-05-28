@@ -1,0 +1,51 @@
+<%- include('layouts/header', { title: 'All electronicss' }) %>
+<%- include('layouts/navbar', { currentPage: 'products' }) %>
+
+<div class="electronicss-container">
+    <div class="section-1">
+        <div class="electronics-filter-container">
+            <div class="filters">
+                <div class="electronics-filter-top">
+                    <h3>Filters</h3>
+                    <span id="reset-btn">Reset</span>
+                </div>
+
+                <div class="electronicscategories-filters">
+                    <div class="electronicscategories-title">
+                        <p>Categories</p>
+                    </div>
+                    <ul class="electronics-categories-list">
+                    </ul>
+                </div>
+                <div class="brands-filters">
+                    <div class="brands-title">
+                        <p>Brands</p>
+                    </div>
+                    <ul class="brands-list">
+                    </ul>
+                </div>
+
+                <div class="prize-range-container">
+                    <div>
+                        <p>Price</p>
+                    </div>
+                    <div class="slider-container">
+                        <p><span id="min-price">0</span> - <span id="max-price">50000</span></p>
+                        <input type="range" id="min-slider" min="0" max="50000" value="0" step="1">
+                        <input type="range" id="max-slider" min="0" max="50000" value="50000" step="1">
+                        <div class="slider-track"></div>
+                    </div>
+                </div>
+
+                <div class="filter-btn">
+                    <button class="apply-btn">Apply</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="electronicslist-container">
+        </div>
+    </div>
+</div>
+
+<%- include('layouts/footer') %>

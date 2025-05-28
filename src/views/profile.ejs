@@ -1,0 +1,410 @@
+<%- include('./layouts/header.ejs')%>
+
+<div id="wrapper">
+  <div id="client-content-wrapper" class="d-flex flex-column">
+    <div id="content">
+      <%- include('./layouts/navbar.ejs')%>
+      <div class="profile-container">
+        <div class="profile-left-box">
+          <div class="profile-first-part">
+            <div class="profile-img">
+              <img src="/images/profile-pic-male.svg" alt="" srcset="">
+            </div>
+            <div class="profile-name">
+              <span>Hello,</span>
+              <h4>Madhan</h4>
+            </div>
+          </div>
+          <div class="profile-second-part">
+            <ul>
+              <li>
+                <div class="customer-profile-img">
+                  <img src="/images/customer-profile.png" alt="">
+                </div>
+                <div class="customer-profile-text">
+                  <p class="active">Profile Information</p>
+                </div>
+              </li>
+              <li>
+                <div class="my-orders-img">
+                  <img src="/images/myorders.png" alt="" srcset="">
+                </div>
+                <div class="my-orders-text">
+                  <p>My Orders</p>
+                </div>
+              </li>
+              <li>
+                <div class="user-logout-img">
+                  <img src="/images/user-logout.png" alt="">
+                </div>
+                <div class="user-logout-text">
+                  <p onclick="logoutSubmit()">Logout</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="profile-right-box">
+          <div class="myorders">
+            <h5>My Orders</h5>
+            <div class="myorder-container">
+
+            </div>
+          </div>
+          <div class="myprofile-info active">
+            <div class="mp-info1">
+              <div class="mp-info-forms">
+                <div class="mp-info-form-heading">
+                  <p>Basic Info</p>
+                </div>
+                <div class="mp-info-form">
+                    <div class="mp-form-group">
+                        <input type="text" disabled id="profileFirstName">
+                        <span></span>
+                    </div>
+                    <div class="mp-form-group">
+                        <input type="text" disabled id="profileLastName">
+                        <span></span>
+                    </div>
+                </div>
+              </div>
+              <div class="mp-info-forms">
+                <div class="mp-info-form-heading">
+                  <p>Your Gender</p>
+                </div>
+                <div class="mp-info-form">
+                    <div class="mp-form-group">
+                        <input type="radio" id="male" name="gender" value="male" class="gender" disabled>
+                        <label for="male">Male</label>
+                        <input type="radio" id="female" name="gender" value="female" class="gender" disabled>
+                        <label for="female">Female</label>
+                        <span></span>
+                    </div>
+                </div>
+              </div>
+              <div class="mp-info-forms">
+                <div class="mp-info-form-heading">
+                  <p>Email Address</p>
+                </div>
+                <div class="mp-info-form">
+                    <div class="mp-form-group">
+                        <input type="email" disabled id="profileEmail">
+                        <span></span>
+                    </div>
+                </div>
+              </div>
+              <div class="mp-info-forms">
+                <div class="mp-info-form-heading">
+                  <p>Mobile Number</p>
+                </div>
+                <div class="mp-info-form">
+                    <div class="mp-form-group">
+                        <input type="number" disabled id="profileMobile">
+                        <span></span>
+                    </div>
+                </div>
+              </div>
+              <div class="mp-info-forms">
+                <div class="mp-info-form-heading">
+                  <p>Manage Address</p>
+                </div>
+                <div class="mp-info-form">
+                    <div class="mp-form-group">
+                        <textarea name="" id="profileAddress" disabled></textarea>
+                        <!-- <input type="number" disabled id="user-mobile"> -->
+      <span></span>
+                    </div>
+                </div>
+              </div>
+              <div class="mp-info-forms">
+                <div class="mp-info-form-heading">
+                  <p>Pincode</p>
+                </div>
+                <div class="mp-info-form">
+                    <div class="mp-form-group">
+                        <input name="" id="profilePincode" disabled></input>
+                        <!-- <input type="number" disabled id="user-mobile"> -->
+      <span></span>
+                    </div>
+                </div>
+              </div>
+              <div class="mp-info-forms">
+                <div class="mp-info-form">
+                  <input type="checkbox" name="" id="enableEdit"><label for="enableEdit">Enable the Edit mode</label>
+                  <button id="updateBtn" disabled>Update</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<%- include('./layouts/script.ejs')%>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+  var swiper = new Swiper(".mySwiper", {
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
+  });
+</script>
+<script>
+    const profileFirstName = document.getElementById('profileFirstName');
+      const profileLastName = document.getElementById('profileLastName');
+      const profileEmail = document.getElementById('profileEmail');
+      const profileMobile = document.getElementById('profileMobile');
+      const profileAddress = document.getElementById('profileAddress');
+      const profilePincode = document.getElementById('profilePincode');
+      const profileGenderMale = document.getElementById('male');
+      const profileGenderFemale = document.getElementById('female');
+      const profileGender= document.querySelectorAll('.gender');
+
+      const editEnable = document.getElementById('enableEdit');
+      const infoForm = document.querySelectorAll('.mp-info-form');
+
+  const getProfileDetails = async () => {
+    try {
+      const response = await fetch('/auth/profile/details', {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      // console.log('datas',data.orders.length);
+
+      // if(data.length>0)
+      // {
+
+
+      profileEmail.value = data.user.email;
+      const myorderContainer = document.querySelector('.myorder-container');
+      myorderContainer.innerHTML = "";
+      if (data.orders.length > 0) {
+        profileFirstName.value = data.orders[0].user.firstname;
+        profileLastName.value = data.orders[0].user.lastname;
+        profileMobile.value = data.orders[0].user.mobile;
+        profileAddress.value = data.orders[0].user.address;
+        profilePincode.value=data.orders[0].user.pincode;
+        data.orders.forEach(d => {
+          d.products.forEach(p => {
+
+            myorderContainer.innerHTML +=
+              ` <div class="orders">
+                                <div class="part1">
+                                  <div class="prod-image">
+                                    <img src="/${p.car_id?.images[0] || p.sps_id?.images[0]}" alt="Clutch">
+                                  </div>
+                                </div>
+                                <div class="part2">
+                                  <h3>${p.car_id?.name || p.sps_id?.name}</h3>
+                                  <p>₹ ${p.car_id?.price || p.sps_id?.price}</p>
+                                  <p>Qty : ${p.qty || p.qty}</p>
+                                </div>
+                                <div class="part3">
+                                    <p>Ordered on :</p>
+                                    <p>${d.createdTime}</p>
+                                </div>
+                            </div>`;
+          })
+        })
+      } else {
+        myorderContainer.innerHTML =
+          `<p>You have not ordered any product yet, please make a purchase.</p>`;
+      }
+      // }
+
+
+editEnable.addEventListener('click', (e) => {
+  if (editEnable.checked) {
+    infoForm.forEach((f) => {
+        const inputs = f.querySelectorAll('input:not([type="checkbox"])');
+        const textArea = f.querySelector('textarea');
+      const btn = f.querySelector('button');
+      inputs.forEach(input => input.disabled = false);
+      if (textArea) {
+        textArea.disabled = false;
+    }
+    if(btn)
+    {
+        btn.disabled = false;
+    }
+    });
+  } else {
+    infoForm.forEach((f) => {
+        const inputs = f.querySelectorAll('input:not([type="checkbox"])');
+        const textArea = f.querySelector('textarea');
+      const btn = f.querySelector('button');
+      inputs.forEach(input => input.disabled = true);
+      if (textArea) {
+        textArea.disabled = true;
+    }
+    if(btn)
+    {
+        btn.disabled = true;
+    }
+    });
+  }
+});
+
+
+
+
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
+
+  getProfileDetails();
+
+  const profileSidebar = document.querySelectorAll('.profile-second-part ul li');
+  const profileRightBox = document.querySelector('.profile-right-box');
+  const myProfileInfo = profileRightBox.querySelector('.myprofile-info');
+  const myOrders = profileRightBox.querySelector('.myorders');
+
+  profileSidebar.forEach((item) => {
+    const profileSidebarText = item.querySelector('p');
+    if (profileSidebarText) {
+      profileSidebarText.addEventListener('click', e => {
+        document.querySelectorAll('.profile-second-part ul li p.active').forEach(activeP => {
+          activeP.classList.remove('active');
+        });
+
+        e.target.classList.add('active');
+
+        if (e.target.textContent.includes('Profile')) {
+          myProfileInfo.classList.add('active');
+          myOrders.classList.remove('active');
+        } else if (e.target.textContent.includes('Orders')) {
+          myProfileInfo.classList.remove('active');
+          myOrders.classList.add('active');
+        }
+      });
+    }
+  });
+  
+  updateBtn.addEventListener('click',async(e)=>{
+    e.preventDefault();
+
+    let userValid = true;
+    const userFields = {
+        profileFirstName: profileFirstName,
+        profileLastName: profileLastName,
+        profileMobile: profileMobile,
+        profileEmail: profileEmail,
+        profilePincode: profilePincode,
+        profileAddress:profileAddress
+      };
+
+
+      const validateField = (field, errorMsg, condition) => {
+        if (condition) {
+          setError(field, errorMsg, ".mp-form-group");
+          return false;
+        } else {
+          setSuccess(field, ".mp-form-group");
+          return true;
+        }
+      };
+
+      userValid &= validateField(
+        userFields.profileFirstName,
+          "First Name field is required",
+          !userFields.profileFirstName.value.trim()
+        );
+        userValid &= validateField(
+            userFields.profileLastName,
+          "Last Name field is required",
+          !userFields.profileLastName.value.trim()
+        );
+        userValid &= validateField(
+            userFields.profileMobile,
+          "Mobile field is required",
+          !userFields.profileMobile.value.trim()
+        );
+        userValid &= validateField(
+            userFields.profileMobile,
+          "The Mobile must contain 10 digits.",
+          userFields.profileMobile.value.length !== 10
+        );
+        userValid &= validateField(
+            userFields.profileAddress,
+          "Address field is required",
+          !userFields.profileAddress.value.trim()
+        );
+        userValid &= validateField(
+            userFields.profilePincode,
+          "Pincode field is required",
+          !userFields.profilePincode.value.trim()
+        );
+        userValid &= validateField(
+            userFields.profilePincode,
+          "The pincode must contain 6 digits.",
+          userFields.profilePincode.value.length !== 6
+        );
+
+        if (userValid) {
+            const orderUserData={
+        firstname:profileFirstName.value,
+        lastname:profileLastName.value,
+        mobile:profileMobile.value,
+        email:profileEmail.value,
+        address:profileAddress.value,
+        pincode:profilePincode.value
+    };
+    profileGender.forEach((g)=>{
+    if(g.checked)
+    {
+        orderUserData.gender=g.value;
+    }
+    })
+    try {
+        const response = await fetch('/updateUserDetails',{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify(orderUserData)
+        });
+        if(!response.ok)
+        {
+            throw new Error("Error code",response.status);
+        }
+        const data=await response.json();
+        if(data.status==200)
+        {
+            getProfileDetails();
+            editEnable.checked=false;
+            infoForm.forEach((f) => {
+        const inputs = f.querySelectorAll('input:not([type="checkbox"])');
+        const textArea = f.querySelector('textarea');
+      const btn = f.querySelector('button');
+      inputs.forEach(input => input.disabled = true);
+      if (textArea) {
+        textArea.disabled = true;
+    }
+    if(btn)
+    {
+        btn.disabled = true;
+    }
+        });
+    }
+        console.log('userData',data);
+        
+    } catch (error) {
+        console.log(error);
+    }
+        }
+
+  })
+</script>
+<%- include('./layouts/footer.ejs')%>
