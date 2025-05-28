@@ -1,0 +1,70 @@
+<div class="navbar">
+    <nav>
+        <div class="brand">
+            <div class="logo">
+                <img src="/images/primary_logo.png" alt="">
+            </div>
+            <!-- <div class="logo-title">
+                <h3>Electro Cart</h3>
+            </div> -->
+        </div>
+        <div class="menu">
+            <ul>
+                <li class="<%= currentPage === 'home' ? 'active' : '' %>"><a href="/">Home</a></li>
+                <li class="<%= currentPage === 'about' ? 'active' : '' %>"><a href="/about">About</a></li>
+                <li class="<%= currentPage === 'products' ? 'active' : '' %>"><a href="/products">Products</a></li>
+                <li class="<%= currentPage === 'contact' ? 'active' : '' %>"><a href="/contact">Contact</a></li>
+            </ul>
+        </div>
+        <div class="user-menu">
+            <ul>
+                <li class="nav-cart <%= currentPage === 'cart' ? 'active' : '' %>">
+                    <a href="/cart"><img src="/images/cart.png" alt=""></a><small></small>
+                </li>
+
+                <% if (isClientAuthenticated) { %>
+                    <!-- <li>
+        
+                        <a class="dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="mr-2 d-none d-lg-inline text-dark small"><%=authAdminUserName.toUpperCase()%></span>
+                        </a>
+                        <div class="auth-dropdown">
+                            <li>Profile</li>
+                            <li id="logout-btn">Logout</li>
+                        </div>
+                        
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                            <a class="dropdown-item" href="/auth/profile">
+                                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Profile
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Logout
+                            </a>
+                        </div>
+                                       
+                    </li> -->
+                    <li class="auth-user <%= currentPage === 'profile' ? 'active' : '' %>">
+                        <a><img src="/images/user_profile.png" alt=""><%=authAdminUserName.toUpperCase()%></a>
+                    </li>
+                    <div class="auth-dropdown">
+                        <li>Profile</li>
+                        <li id="logout-btn">Logout</li>
+                    </div>
+                <% } else { %>
+                    <li class="login-open-btn"><a href="#">Login / Register</a></li>
+                <% } %>
+
+                <% if(isClientAuthenticated){%>
+                    
+                <%}else{%>
+                    
+                    
+                    <%}%>
+            </ul>
+        </div>
+    </nav>
+</div>
+

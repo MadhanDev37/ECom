@@ -1,0 +1,107 @@
+<%- include('../layouts/header.ejs') %>
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <%- include('../layouts/sidebar.ejs')%>
+    <!-- End of Sidebar -->
+
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <!-- Topbar -->
+            <%- include('../layouts/navbar.ejs')%>
+            <!-- End of Topbar -->
+
+            <div class="container-fluid">
+
+               
+
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-0 text-gray-800">Users</h1>
+                    <div>
+                        <a href="/admin/users/add" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-plus text-white-50"></i> Create</a>
+                        <a href="/admin/users/trash" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm"><i class="fas fa-trash text-white-50"></i> Trash</a>
+                    </div>
+                </div>
+                <% if (success_msg.length > 0) { %>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                      <%= success_msg[0] %>
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                  <% } %>
+                  
+                  <% if (error_msg.length > 0) { %>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                      <%= error_msg[0] %>
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                  <% } %>
+                <div class="card shadow mb-4">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>Status</th>
+                                        <th>Created</th>
+                                        <th>Edit</th>
+                                        <th>Delete</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <% if(users.length>0) { %>
+                                    <%users.forEach((u)=>{ %>
+                                        <tr>
+                                            <td><%=u.username%></td>
+                                            <td><%=u.email%></td>
+                                           
+                                            <%if(u.role === 0){%>
+                                            <td><span class="btn text-success">Admin User</span></td>
+                                            <%}else{%>
+                                                <td><span class="btn text-secondary">Client User</span></td>
+                                            <%}%>
+                                            <%if(u.status === 0){%>
+                                            <td><span class="btn text-success">Active</span></td>
+                                            <%}else{%>
+                                                <td><span class="btn text-secondary">In Active</span></td>
+                                            <%}%>
+                                            <td><%=u.createdTime%></td>
+                                            <td><a href="/admin/users/edit/<%=u._id%>" class="btn btn-warning">Edit</a></td>
+                                            <td>
+                                                <form action="/admin/users/softdelete" method="post">
+                                                    <input type="hidden" name="userId" value="<%= u._id %>">
+                                                    <button class="btn btn-danger " type="submit" >Delete</button>
+                                                </form>
+                                        
+                                            </td>
+                                        </tr>
+                                    <%})%>
+                                <% }%>
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../layouts/script.ejs')%>
+
+<script>
+    $(document).ready(function() {
+        $('#dataTable').DataTable();
+    });
+</script>
+
+<%- include('../layouts/footer.ejs')%>

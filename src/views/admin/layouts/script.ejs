@@ -1,0 +1,41 @@
+<script src="/vendor/jquery/jquery.min.js"></script>
+<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="/js/sb-admin-2.min.js"></script>
+
+<!-- Page level plugins -->
+<script src="/vendor/chart.js/Chart.min.js"></script>
+
+<script src="/vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+<script>$('#image').on('change', function() {
+    var files = $(this)[0].files;
+    $('.preview-images-zone').removeClass('d-none');
+    $('.preview-images-zone').empty();
+    for (var i = 0; i < files.length; i++) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var img = $('<div class="preview-image"><img src="' + e.target.result + '"></div>');
+            $('.preview-images-zone').append(img);
+        }
+        reader.readAsDataURL(files[i]);
+    }
+});
+
+if ($('#passwordUpdate').attr('checked')) {
+    $('.formPassword').removeClass('d-none');
+}
+
+$('#passwordUpdate').on('change', function() {
+    if ($(this).is(':checked')) {
+        $('.formPassword').removeClass('d-none');
+    } else {
+        $('.formPassword').addClass('d-none');
+    }
+});
+
+</script>

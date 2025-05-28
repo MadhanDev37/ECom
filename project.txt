@@ -1,0 +1,89 @@
+Ecommerce site for selling cars and its spare parts. Admin post cars and spare parts. User can login and purchase car or spare parts.
+
+Home page (List top selling cars and spare parts)
+search car or spare parts
+List page for cars and spare parts (seperately)
+Details page
+add to cart feature
+Purchase with payment integeration
+In admin, crud for cars, spare parts.
+List out the purchases completed to admin
+Admin can upload multiple images for cars
+
+
+
+
+
+
+
+
+ecommerce-site/
+├── config/
+│   ├── db.js                 # Database connection configuration
+│   └── config.js             # Other configuration settings
+├── controllers/
+│   ├── authController.js     # Authentication related controllers
+│   ├── carController.js      # Car related controllers
+│   ├── sparePartController.js# Spare parts related controllers
+│   ├── cartController.js     # Cart related controllers
+│   ├── purchaseController.js # Purchase related controllers
+│   └── adminController.js    # Admin related controllers
+├── models/
+│   ├── User.js               # User model
+│   ├── Car.js                # Car model
+│   ├── SparePart.js          # Spare part model
+│   ├── Cart.js               # Cart model
+│   └── Purchase.js           # Purchase model
+├── views/
+│   ├── home.ejs              # Home page view
+│   ├── carList.ejs           # Car list page view
+│   ├── sparePartList.ejs     # Spare parts list page view
+│   ├── carDetail.ejs         # Car detail page view
+│   ├── sparePartDetail.ejs   # Spare part detail page view
+│   ├── cart.ejs              # Cart page view
+│   ├── purchase.ejs          # Purchase page view
+│   └── admin/
+│       ├── dashboard.ejs     # Admin dashboard view
+│       ├── carForm.ejs       # Admin car form view (CRUD operations)
+│       ├── sparePartForm.ejs # Admin spare part form view (CRUD operations)
+│       ├── purchaseList.ejs  # Admin purchase list view
+├── routes/
+│   ├── authRoutes.js         # Authentication routes
+│   ├── carRoutes.js          # Car routes
+│   ├── sparePartRoutes.js    # Spare parts routes
+│   ├── cartRoutes.js         # Cart routes
+│   ├── purchaseRoutes.js     # Purchase routes
+│   └── adminRoutes.js        # Admin routes
+├── middlewares/
+│   ├── authMiddleware.js     # Authentication middleware
+├── public/
+│   ├── css/                  # CSS files
+│   ├── js/                   # JavaScript files
+│   └── images/               # Image files
+├── .env                      # Environment variables
+├── app.js                    # Main application file
+├── package.json              # NPM package file
+└── README.md                 # Project documentation
+
+
+
+
+
+npm i @dr.pogodin/csurf
+
+
+npm install connect-flash express-session
+
+
+ElectroCart
+
+
+📱 Smartphone brands
+
+🎧 Audio brands
+
+🖥️ Laptop brands
+
+📷 Camera brands
+
+🏠 Appliance brands

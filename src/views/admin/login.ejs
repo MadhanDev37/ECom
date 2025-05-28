@@ -1,0 +1,28 @@
+<%- include('./layouts/header.ejs')%>
+
+    <div class="login-form d-flex justify-content-center align-items-center" style="height: 100vh;" id="admin-login-page">
+            <form action="/admin/login" method="post" class="form p-5" enctype="application/x-www-form-urlencoded" style="background-color: #e4e1e1;box-shadow: 3px 3px 3px 3px #e4e1e1;">
+                <div class="form-group d-flex flex-column">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email" class="form-control <%= validationErrors.find(e => e.path === 'email') ? 'invalid' : '' %>" value="<%=oldInput.email%>">
+                    <span class="text-danger">
+                        <% const emailError = validationErrors.find(e => e.path === 'email'); %>
+                        <%= emailError ? emailError.msg : '' %>
+                      </span>   
+                </div>
+                <div class="form-group  d-flex flex-column">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" class="form-control <%= validationErrors.find(e => e.path === 'password') ? 'invalid' : '' %>" value="<%=oldInput.password%>">
+                    <span class="text-danger">
+                        <% const passwordError = validationErrors.find(e => e.path === 'password'); %>
+                        <%= passwordError ? passwordError.msg : '' %>
+                      </span>   
+                </div>
+                <div class="form-group  d-flex flex-column">
+                    <button type="submit" class="btn btn-outline-info">Login</button>
+                </div>
+            </form>
+    </div>
+
+<%- include('./layouts/script.ejs')%>
+<%- include('./layouts/footer.ejs')%>

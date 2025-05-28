@@ -1,0 +1,175 @@
+<%- include('./layouts/header.ejs')%>
+
+<div id="wrapper">
+  <div id="client-content-wrapper" class="d-flex flex-column">
+    <div id="content">
+      <%- include('./layouts/navbar.ejs')%>
+      <div class="spslists-container">
+        <div class="section-1">
+          <!-- <h1>tetstst</h1> -->
+          <div class="sps-filter-container">
+            <div class="filters">
+              <div class="sps-filter-head">
+                <h3>Filters</h3>
+                <span>Reset</span>
+              </div>
+              <div class="spscategory-filters p-3">
+                <div class="d-flex justify-content-between">
+                  <p>Category</p>
+                  <span>&#9866;</span>
+                </div>
+                <ul>
+                  <%spc.forEach((s,i)=>{%>
+                  <li>
+                    <input type="checkbox" name="category" class="category" id="cbr<%=i+1%>" value="<%=s._id%>" />
+                    <label for="cbr<%=i+1%>"><%=s.name%></label>
+                  </li>
+                  <%})%>
+                </ul>
+              </div>
+              <div class="filter-btn">
+                <button class="btn btn-outline-info">Apply</button>
+              </div>
+            </div>
+          </div>
+          <div class="spslist-container">
+            <div class="spslists">
+              <div class="skeleton"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('./layouts/script.ejs')%>
+<script>
+    const categoryParams=new URLSearchParams(window.location.search);
+    const category= categoryParams.get('category');
+    const carCategory = document.querySelectorAll(".category");
+  const spsFilterHead = document.querySelector(".sps-filter-head span");
+    const trimmedCategories = category != null ? category.split(",") : [];
+    carCategory.forEach((cb) => {
+    if (cb && trimmedCategories.includes(cb.value)) {
+      cb.checked = true;
+      spsFilterHead.classList.add("active");
+    }
+  });
+
+
+  const getSps = async (category) => {
+    try {
+      const response = await fetch("/getAllSps", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          category: category
+        }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      console.log('data',data);
+      const carlistContainer = document.querySelector(".spslists");
+      if (data.length > 0) {
+        carlistContainer.innerHTML = "";
+        data.forEach((c) => {
+          let indprice;
+
+          if (typeof c.price === 'number' && !isNaN(c.price)) {
+  if (c.price.toString().length >= 6 && c.price.toString().length < 8) {
+    indprice = (c.price / 100000).toFixed(2).concat(" Lakh");
+  } else if (c.price.toString().length >= 8 && c.price.toString().length < 11) {
+    indprice = (c.price / 10000000).toFixed(2).concat(" Crore");
+  } else {
+    indprice = c.price.toString();
+  }
+} 
+          carlistContainer.innerHTML += `
+          <div class="sps-list">
+          <div class="sps-list-top">
+            <div class="sps-img">
+                <img src="/${c.images[0]}" alt="${c.name}" />
+            </div>
+          </div>
+          <div class="sps-list-bottom">
+            <p data-cid=${c._id} id="carName">${c.name}</p>
+            <p>₹ ${indprice}</p>
+            <button class="btn home-book-now">View Details</button>
+          </div>
+          </div>`;
+        });
+        const carsList = document.querySelectorAll('.sps-list');
+        carsList.forEach((c) => {
+          c.addEventListener('click', (e) => {
+            const carId = c.querySelector('#carName').getAttribute('data-cid');
+            console.log('carlist', carId)
+
+            e.preventDefault();
+            window.location.href = `/spslist/${carId}`;
+          })
+        })
+        document.querySelectorAll(".sps-list img").forEach((img) => {
+          img.addEventListener("load", () => {
+            const skeleton = img.previousElementSibling;
+            if (skeleton && skeleton.classList.contains("skeleton")) {
+              skeleton.remove();
+            }
+            img.style.opacity = "1";
+          });
+        });
+      } else {
+        carlistContainer.innerHTML = "";
+        carlistContainer.innerHTML = `<h2>Spare parts are not available in this category.</h2>`;
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+  getSps(category);
+
+  applyFilterBtn = document.querySelector(".filter-btn .btn");
+  applyFilterBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    spscategoryFilters = document.querySelector('.spscategory-filters ul')
+    selectedCategories = spscategoryFilters.querySelectorAll("input");
+    let sendCategories = [];
+    selectedCategories.forEach((sp) => {
+      if (sp.checked == true) {
+        sendCategories.push(sp.value);
+      }
+    });
+    if (sendCategories.length > 0) {
+      const s = sendCategories.join(",");
+      window.history.replaceState({},'',`/spslist?category=${s}`);
+      preventBackNavigation();
+      spsFilterHead.classList.add("active");
+    getSps(sendCategories);
+    }
+  });
+  
+  spsFilterHead.addEventListener("click", () => {
+    carCategory.forEach((cb) => {
+      if (cb.checked) {
+        cb.checked = false;
+      }
+    });
+
+    spsFilterHead.classList.remove("active");
+    // window.history.replaceState('/carlist');
+    window.history.replaceState({}, "", "/spslist");
+    getSps(category);
+    preventBackNavigation();
+  });
+  
+  function preventBackNavigation() {
+    window.history.pushState(null, "", window.location.href);
+    window.addEventListener("popstate", function () {
+      window.history.pushState(null, "", window.location.href);
+    });
+  }
+</script>
+<%- include('./layouts/footer.ejs')%>

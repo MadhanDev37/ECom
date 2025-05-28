@@ -1,0 +1,72 @@
+<%- include('../layouts/header.ejs') %>
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <%- include('../layouts/sidebar.ejs')%>
+    <!-- End of Sidebar -->
+
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <!-- Topbar -->
+            <%- include('../layouts/navbar.ejs')%>
+            <!-- End of Topbar -->
+
+            <div class="container-fluid">
+
+               
+
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <a href="/admin/brands" class="h5 m-0"><i class="fas fa-angle-left"></i> Go back to brand lists</a>
+                </div>
+
+                <div class="card shadow mb-4">
+                    <div class="card-body">
+                        <h5 class="text-info">Create New Brand</h5>
+                            <form action="/admin/brands/add" class="mt-3" method="post" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <label for="title">Category</label>
+                                    <select name="category" id="category" aria-label="Default select example" class="form-control <%= validationErrors.find(e => e.path === 'category') ? 'invalid' : '' %>" aria-placeholder="Choose a Category">
+                                        <option value="" disabled selected>Choose a Category</option>
+                                        <span><%=oldInput.category %></span>
+                                        <% categories.forEach(b => { %>
+                                            <option value="<%= b._id %>" <% if (oldInput.category == b._id) { %>selected<% } %>><%= b.title %></option>
+                                            <% }) %>
+                                    </select>
+                                    
+                                    <span class="text-danger">
+                                        <% const bnameError = validationErrors.find(e => e.path === 'category'); %>
+                                    <%= bnameError ? bnameError.msg : '' %>
+                                    </span>
+                                </div>
+                               
+                                <div class="form-group">
+                                    <label for="title">Name</label>
+                                    <input type="text" name="name" id="name" class="form-control <%=validationErrors.find( e=> e.path === 'name') ? 'invalid' : '' %>" value="<%=oldInput.name%>">
+                                    <span class="text-danger">
+                                        <% const nameError = validationErrors.find(e => e.path === 'name'); %>
+                                    <%= nameError ? nameError.msg : '' %>
+                                    </span>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <input type="submit" name="create_brand" class="btn btn-primary" value="Create Brand">
+                                </div>
+                            </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../layouts/script.ejs')%>
+
+<script>
+    $(document).ready(function() {
+        $('#dataTable').DataTable();
+    });
+</script>
+
+<%- include('../layouts/footer.ejs')%>

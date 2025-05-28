@@ -1,0 +1,86 @@
+<%- include('../layouts/header.ejs') %>
+
+<div id="wrapper">
+
+    <%- include('../layouts/sidebar.ejs')%>
+
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <%- include('../layouts/navbar.ejs')%>
+            <div class="container-fluid">
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-0 text-gray-800">Orders</h1>
+                </div>
+                <% if (success_msg.length > 0) { %>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                      <%= success_msg[0] %>
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                  <% } %>
+                  
+                  <% if (error_msg.length > 0) { %>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                      <%= error_msg[0] %>
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                  <% } %>
+                <div class="card shadow mb-4">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Customer Name</th>
+                                        <th>Products</th>
+                                        <th>Qty</th>
+                                        <th>Amount</th>
+                                        <th>Payment Status</th>
+                                        <th>Created Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if(orders.length>0) { %>
+                                        <%orders.forEach((p)=>{ %>
+                                            <tr>
+                                                <td><%=p.user.name%></td>
+                                                <td>
+                                                    <% p.products.forEach((ps)=> { %>
+                                                        <div class="payment-products">
+                                                            <div class="products-image">
+                                                                <img src="/<%= ps.product_id?.images[0] %>" alt="" style="width:15vw">
+                                                            </div>
+                                                            <p><%= ps.product_id?.name %> <span>(qty-<%=ps.qty%>)</span></p>
+                                                        </div>
+                                                    <% }) %>
+                                                    
+                                                 
+                                                </td>
+                                                <td><%= p.totalQty %></td>
+                                                <td>₹<%= p.totalAmount.toLocaleString("en-IN") %></td>
+                                                <td>Success</td>
+                                                <td><%= p.createdTime %></td>
+                                                </td>
+                                            </tr>
+                                        <%})%>
+                                    <% }%>
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('../layouts/script.ejs')%>
+<script>
+    $(document).ready(function() {
+        $('#dataTable').DataTable();
+    });
+</script>
+<%- include('../layouts/footer.ejs')%>
